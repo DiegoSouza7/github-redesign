@@ -1,28 +1,23 @@
 import { Button, Flex, Stack } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Input } from '../components/Form/Input'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { useUserContext } from '../contexts/UserContext'
 
-type SignInFormData = {
-  email: string;
-  password: string;
+type SearchFormData = {
+  name: string;
 }
 
-const signInFormSchema = yup.object().shape({
-  email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-  password: yup.string().required('Senha obrigatória'),
-})
+export default function Home() {
+  const { register, handleSubmit, formState } = useForm()
+  const history = useRouter()
+  const { setSearchNameUser } = useUserContext()
 
-export default function SignIn() {
-  const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(signInFormSchema)
-  })
-
-  const handleSignIn: SubmitHandler<SignInFormData> = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    console.log(data)
+  const handleSignIn: SubmitHandler<SearchFormData> = (data) => {
+    const {name} = data
+    setSearchNameUser(name.replace(/\s/g, ''))
+    history.push(`repositories`)
   }
 
   return (
@@ -45,25 +40,18 @@ export default function SignIn() {
       >
         <Stack spacing="4">
           <Input
-            name="email"
-            type="email"
-            label="Email"
-            error={formState.errors.email}
-            {...register('email')}
-          />
-          <Input
-            name="password"
-            type="password"
-            label="Senha"
-            error={formState.errors.password}
-            {...register('password')}
+            name="name"
+            type="text"
+            label="Nome do usuário github"
+            placeholder="Nome sem espaços"
+            {...register('name')}
           />
         </Stack>
         <Button
           type="submit"
           mt="6"
           bgColor="green.500"
-          _hover={{bgColor: 'green.400'}}
+          _hover={{ bgColor: 'green.400' }}
           size="lg"
           isLoading={formState.isSubmitting}
         >

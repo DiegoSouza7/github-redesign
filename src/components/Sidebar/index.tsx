@@ -1,20 +1,22 @@
 import { Box, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { AiOutlineGithub } from 'react-icons/ai';
 import { GiBinoculars } from 'react-icons/gi';
+import { ImUsers } from 'react-icons/im';
 import { MdExplore } from 'react-icons/md';
-import { RiGitPullRequestFill, RiGitRepositoryLine, RiHandbagLine, RiStarSFill, RiUserFollowLine } from 'react-icons/ri';
+import { RiGitPullRequestFill, RiGitRepositoryLine, RiHandbagLine, RiStarSFill } from 'react-icons/ri';
 import { VscIssues } from 'react-icons/vsc';
+import { useUserContext } from "../../contexts/UserContext";
 import { NavLink } from './NavLink';
 import { NavSection } from './NavSection';
 
 export function Sidebar() {
-
+  const {userProfile} = useUserContext()
 
   return (
     <Box
       as="aside"
       w="100%"
-      maxWidth="200px"
+      maxWidth="250px"
       bg="blue.600"
       h="100vh"
       display="flex"
@@ -40,13 +42,13 @@ export function Sidebar() {
           <NavLink href="/overview" h="50px" alignItems="center" pl="25px" icon={GiBinoculars}>
             Overview
           </NavLink>
-          <NavLink href="/repositories" h="50px" alignItems="center" pl="25px" icon={RiGitRepositoryLine}>
+          <NavLink quantity={userProfile.public_repos} href="/repositories" h="50px" alignItems="center" pl="25px" icon={RiGitRepositoryLine}>
             Repositories
           </NavLink>
           <NavLink href="/stars" h="50px" alignItems="center" pl="25px" icon={RiStarSFill}>
             Stars
           </NavLink>
-          <NavLink href="/followers" h="50px" alignItems="center" pl="25px" icon={RiUserFollowLine}>
+          <NavLink quantity={userProfile.followers} href="/followers" h="50px" alignItems="center" pl="25px" icon={ImUsers}>
             Followers
           </NavLink>
         </NavSection>
