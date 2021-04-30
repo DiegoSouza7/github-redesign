@@ -22,7 +22,7 @@ export function Header () {
   if(userProfile) {
     return (
       <Flex
-        flex={1}
+        w="100%"
         h="150px"
         borderBottom="1px solid #eff0f1"
         flexDirection="column"

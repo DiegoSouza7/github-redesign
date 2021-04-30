@@ -17,6 +17,7 @@ export function Profile() {
       <Box
         bg="white"
         w="250px"
+        minW="250px"
         h="100vh"
         textAlign="center"
         boxShadow="10px 5px 5px #eff0f1"

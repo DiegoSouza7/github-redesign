@@ -1,6 +1,6 @@
+import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { api } from "../services/api";
-
 
 type User = {
   name: string;
@@ -15,8 +15,8 @@ type User = {
   blog: string;
 }
 
-
 type UserContextProps = {
+  userName: string;
   userProfile: User;
   setSearchNameUser: (name: string) => void;
 }
@@ -30,9 +30,11 @@ const UserContext = createContext({} as UserContextProps)
 export function UserContextProvider({ children }: UserProviderProps) {
   const [userProfile, setUserProfile] = useState<User>()
   const [userName, setUserName] = useState('DiegoSouza7')
+  const history = useRouter()
 
   function setSearchNameUser(name: string) {
     setUserName(name)
+    history.push(`repositories`)
   }
 
   useEffect(() => {
@@ -45,7 +47,8 @@ export function UserContextProvider({ children }: UserProviderProps) {
   return (
     <UserContext.Provider value={{
       userProfile,
-      setSearchNameUser
+      userName,
+      setSearchNameUser,
     }}>
       {children}
     </UserContext.Provider>

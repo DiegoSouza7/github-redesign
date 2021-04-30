@@ -1,5 +1,4 @@
 import { Button, Flex, Stack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Input } from '../components/Form/Input'
@@ -11,13 +10,10 @@ type SearchFormData = {
 
 export default function Home() {
   const { register, handleSubmit, formState } = useForm()
-  const history = useRouter()
   const { setSearchNameUser } = useUserContext()
 
   const handleSignIn: SubmitHandler<SearchFormData> = (data) => {
-    const {name} = data
-    setSearchNameUser(name.replace(/\s/g, ''))
-    history.push(`repositories`)
+    setSearchNameUser(data.name.replace(/\s/g, ''))
   }
 
   return (
