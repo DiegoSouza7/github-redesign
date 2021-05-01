@@ -10,9 +10,9 @@ import { NavLink } from './NavLink';
 import { NavSection } from './NavSection';
 
 export function Sidebar() {
-  const {userProfile} = useUserContext()
+  const {userProfile, userProfileStars} = useUserContext()
 
-  if(userProfile) {
+  if(userProfile && userProfileStars) {
     return (
       <Box
         as="aside"
@@ -46,7 +46,7 @@ export function Sidebar() {
             <NavLink quantity={userProfile.public_repos} href="/repositories" h="50px" alignItems="center" pl="25px" icon={RiGitRepositoryLine}>
               Repositories
             </NavLink>
-            <NavLink href="/stars" h="50px" alignItems="center" pl="25px" icon={RiStarSFill}>
+            <NavLink quantity={userProfileStars} href="/stars" h="50px" alignItems="center" pl="25px" icon={RiStarSFill}>
               Stars
             </NavLink>
             <NavLink quantity={userProfile.followers} href="/followers" h="50px" alignItems="center" pl="25px" icon={ImUsers}>

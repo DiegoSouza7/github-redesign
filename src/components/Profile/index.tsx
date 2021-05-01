@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { FiExternalLink } from 'react-icons/fi';
 import { HiUserAdd } from 'react-icons/hi';
-import { ImUsers, ImUser } from 'react-icons/im';
+import { ImUser, ImUsers } from 'react-icons/im';
 import { MdLocationOn } from 'react-icons/md';
 import { RiGitRepositoryLine, RiStarSFill } from "react-icons/ri";
 import { useUserContext } from "../../contexts/UserContext";
@@ -45,6 +45,16 @@ export function Profile() {
           >
             {userProfile.name}
           </Text>
+          {userProfile.company && (
+            <Text
+              color="gray.600"
+              fontWeight={500}
+              fontSize="md"
+              p="0 10px"
+            >
+              {userProfile.company}
+            </Text>
+          )}
           <Text
             color="gray.700"
             fontWeight={500}
