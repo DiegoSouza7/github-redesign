@@ -8,10 +8,8 @@ type Repository = {
   description: string;
   updated_at: string;
   language: string;
-  stars: number;
-  commits?: {
-    totalCommits: number;
-    commitisDates: string;
+  owner: {
+    login: string;
   };
   license?: {
     key: string;

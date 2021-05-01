@@ -13,10 +13,14 @@ type SearchFormData = {
 
 export function Header () {
   const { register, handleSubmit } = useForm()
-  const {userProfile} = useUserContext()
+  const {userProfile, searchRepository, orderByrepositories} = useUserContext()
 
   const handleSearch: SubmitHandler<SearchFormData> = (data) => {
-    console.log(data)
+    searchRepository(data.search)
+  }
+
+  function handleOrderRepositories(order: string) {
+    orderByrepositories(order)
   }
 
   if(userProfile) {
@@ -107,6 +111,8 @@ export function Header () {
           >
             <Flex
               justifyContent="space-evenly"
+              onClick={() => handleOrderRepositories('type')}
+              cursor="pointer"
             >
               <Text
                 color="gray.600"
@@ -118,6 +124,8 @@ export function Header () {
             </Flex>
             <Flex
               justifyContent="space-evenly"
+              onClick={() => handleOrderRepositories('language')}
+              cursor="pointer"
             >
               <Text
                 color="gray.600"
@@ -129,6 +137,8 @@ export function Header () {
             </Flex>
             <Flex
               justifyContent="space-evenly"
+              onClick={() => handleOrderRepositories('date')}
+              cursor="pointer"
             >
               <Text
                 color="gray.600"

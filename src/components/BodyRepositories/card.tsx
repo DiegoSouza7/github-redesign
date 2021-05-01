@@ -5,6 +5,9 @@ import { IoMdGitCommit } from "react-icons/io";
 import { RiStarSFill } from "react-icons/ri";
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { useUserContext } from "../../contexts/UserContext";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
@@ -17,10 +20,8 @@ type CardProps = {
     description: string;
     updated_at: string;
     language: string;
-    stars: number;
-    commits?: {
-      totalCommits: number;
-      commitisDates: string;
+    owner: {
+      login: string;
     };
     license?: {
       key: string;
@@ -57,12 +58,68 @@ const options = {
       opacityTo: 0.2
     }
   },
+  xaxis: {
+    axisBorder: {
+      color: theme.colors.gray[600]
+    },
+    axisTicks: {
+      color: theme.colors.gray[600]
+    },
+    categories: [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez',
+    ]
+  }
 }
-const series = [
-  { name: 'series1', data: [5, 2, 9, 6, 20, 1, 10] }
-]
 
 export function Card({ repo }: CardProps) {
+  const [stars, setStars] = useState(0)
+  const [totalCommits, setTotalCommits] = useState(0)
+  const [commitsDates, setCommitsDates] = useState([''])
+  const series = [
+    { name: 'commitsDates', data: [
+      commitsDates.filter((date) => date === 'Jan').length,
+      commitsDates.filter((date) => date === 'fev').length,
+      commitsDates.filter((date) => date === 'mar').length,
+      commitsDates.filter((date) => date === 'abr').length,
+      commitsDates.filter((date) => date === 'mai').length,
+      commitsDates.filter((date) => date === 'jun').length,
+      commitsDates.filter((date) => date === 'Jul').length,
+      commitsDates.filter((date) => date === 'ago').length,
+      commitsDates.filter((date) => date === 'set').length,
+      commitsDates.filter((date) => date === 'out').length,
+      commitsDates.filter((date) => date === 'nov').length,
+      commitsDates.filter((date) => date === 'dez').length,
+    ] }
+  ]
+
+  useEffect(() => {
+    api.get(`repos/${repo.owner.login}/${repo.name}/stargazers`).then(response => {
+      setStars(response.data.length)
+    })
+    api.get(`repos/${repo.owner.login}/${repo.name}/commits`).then(response => {
+      setTotalCommits(response.data.length)
+      const commitsDates = response.data.map(commit => 
+        format(
+          new Date(commit.commit.author.date),
+          'MMM',
+          {
+            locale: ptBR,
+          }
+        ))
+      setCommitsDates(commitsDates)
+    })
+  }, [])
 
   return (
     <Flex
@@ -74,9 +131,8 @@ export function Card({ repo }: CardProps) {
       justifySelf="center"
       boxShadow="2px 2px 2px 2px#eff0f1"
     >
-      <Stack
+      <Flex
         flexDirection="column"
-        spacing="2"
         w="90%"
         h="90%"
         m="auto auto"
@@ -91,6 +147,7 @@ export function Card({ repo }: CardProps) {
         <Text
           color="gray.500"
           fontWeight={400}
+          mt="5px"
         >
           {format(
             new Date(repo.updated_at),
@@ -104,10 +161,11 @@ export function Card({ repo }: CardProps) {
           color="gray.600"
           fontWeight={500}
           noOfLines={3}
+          mt="5px"
         >
           {repo.description}
         </Text>
-        <Chart options={options} series={series} type="area" width="100%" />
+        <Chart mt="5px" options={options} series={series} type="area" width="100%" />
         <Flex
           w="90%"
           justifyContent="space-between"
@@ -119,14 +177,14 @@ export function Card({ repo }: CardProps) {
             alignItems="center"
           >
             <Icon as={RiStarSFill} fontSize="16" color="gray.600" />
-            <Text ml="5px" color="gray.600">583</Text>
+            <Text ml="5px" color="gray.600">{stars}</Text>
           </Flex>
           <Flex
             justifyContent="space-between"
             alignItems="center"
           >
             <Icon as={IoMdGitCommit} fontSize="16" color="gray.600" />
-            <Text ml="5px" color="gray.600">20</Text>
+            <Text ml="5px" color="gray.600">{totalCommits}</Text>
           </Flex>
           <Flex
             justifyContent="space-between"
@@ -136,7 +194,7 @@ export function Card({ repo }: CardProps) {
             {repo.license && <Text ml="5px" color="gray.600">MIT</Text>}
           </Flex>
         </Flex>
-      </Stack>
+      </Flex>
     </Flex>
   )
 }

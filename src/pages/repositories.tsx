@@ -35,7 +35,5 @@ export default function Repositories() {
           <Icon as={GoPlusSmall} fontSize="30" />
         </Button>
       </Flex>
-    </Flex>
-
-  )
+    </Flex>  )
 }

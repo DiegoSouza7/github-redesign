@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { api } from "../services/api";
 
@@ -22,10 +21,8 @@ type Repository = {
   description: string;
   updated_at: string;
   language: string;
-  stars: number;
-  commits?: {
-    totalCommits: number;
-    commitisDates: string;
+  owner: {
+    login: string;
   };
   license?: {
     key: string;
@@ -38,7 +35,8 @@ type UserContextProps = {
   userProfile: User;
   userProfileStars: number;
   repositories: Repository[];
-  setSearchNameUser: (name: string) => void;
+  searchRepository: (name: string) => void;
+  orderByrepositories: (order: string) => void;
 }
 
 type UserProviderProps = {
@@ -52,11 +50,30 @@ export function UserContextProvider({ children }: UserProviderProps) {
   const [userProfileStars, setUserProfileStars] = useState(0)
   const [userName, setUserName] = useState('DiegoSouza7')
   const [repositories, setRepositories] = useState<Repository[]>()
-  const history = useRouter()
 
-  function setSearchNameUser(name: string) {
-    setUserName(name)
-    history.push(`repositories`)
+  async function searchRepository(name: string) {
+    console.log(name)
+    api.get(`/search/repositories?q=${name}&per_page=5`).then(response => {
+      setRepositories(response.data.items)
+    })
+  }
+
+  function orderByrepositories(order: string) {
+    if (order === 'date') {
+      api.get(`users/${userName}/repos?sort=updated`).then(response => {
+        setRepositories(response.data)
+      })
+
+    } else if (order === 'language') {
+      api.get(`users/${userName}/repos?sort=language`).then(response => {
+        setRepositories(response.data)
+      })
+
+    } else if (order === 'type') {
+      api.get(`users/${userName}/repos?sort=type`).then(response => {
+        setRepositories(response.data)
+      })
+    }
   }
 
   useEffect(() => {
@@ -66,31 +83,10 @@ export function UserContextProvider({ children }: UserProviderProps) {
     api.get(`users/${userName}/starred`).then(response => {
       setUserProfileStars(response.data.length)
     })
-  }, [userName])
-
-  useEffect(() => {
-
     api.get(`users/${userName}/repos`).then(response => {
       setRepositories(response.data)
     })
 
-    if(repositories) {
-      // repositories.map(repo => {
-      //   console.log(repo)
-      //   api.get(`repos/${userName}/${repo.name}/stargazers`).then(response => {
-      //     setRepositories(repo.stars = response.data.length)
-      //   })
-  
-      //   api.get(`repos/${userName}/${repo.name}/commits`).then(response => {
-      //     return repo.commits = {
-      //       totalCommits: response.data.length,
-      //       commitisDates: response.data.map(date => {
-      //         return date.commit.author.date
-      //       })
-      //     }
-      //   })
-      // })
-    }
   }, [userName])
 
   return (
@@ -99,7 +95,8 @@ export function UserContextProvider({ children }: UserProviderProps) {
       userName,
       userProfileStars,
       repositories,
-      setSearchNameUser,
+      searchRepository,
+      orderByrepositories
     }}>
       {children}
     </UserContext.Provider>
