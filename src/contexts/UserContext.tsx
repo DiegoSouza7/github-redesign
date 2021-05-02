@@ -50,27 +50,42 @@ export function UserContextProvider({ children }: UserProviderProps) {
   const [userProfileStars, setUserProfileStars] = useState(0)
   const [userName, setUserName] = useState('DiegoSouza7')
   const [repositories, setRepositories] = useState<Repository[]>()
+  const [orderBy, setOrderBy] = useState('desc')
 
   async function searchRepository(name: string) {
-    console.log(name)
-    api.get(`/search/repositories?q=${name}&per_page=5`).then(response => {
+    api.get(`/search/repositories?q=${userName}/${name}&per_page=10`).then(response => {
       setRepositories(response.data.items)
     })
   }
 
   function orderByrepositories(order: string) {
     if (order === 'date') {
-      api.get(`users/${userName}/repos?sort=updated`).then(response => {
+      api.get(`users/${userName}/repos?sort=updated=order${orderBy}`).then(response => {
+        if(orderBy === 'desc') {
+          setOrderBy('asc')
+        } else {
+          setOrderBy('desc')
+        }
         setRepositories(response.data)
       })
 
     } else if (order === 'language') {
-      api.get(`users/${userName}/repos?sort=language`).then(response => {
+      api.get(`users/${userName}/repos?sort=language=order${orderBy}`).then(response => {
+        if(orderBy === 'desc') {
+          setOrderBy('asc')
+        } else {
+          setOrderBy('desc')
+        }
         setRepositories(response.data)
       })
 
     } else if (order === 'type') {
-      api.get(`users/${userName}/repos?sort=type`).then(response => {
+      api.get(`users/${userName}/repos?sort=type=order${orderBy}`).then(response => {
+        if(orderBy === 'desc') {
+          setOrderBy('asc')
+        } else {
+          setOrderBy('desc')
+        }
         setRepositories(response.data)
       })
     }
@@ -96,7 +111,7 @@ export function UserContextProvider({ children }: UserProviderProps) {
       userProfileStars,
       repositories,
       searchRepository,
-      orderByrepositories
+      orderByrepositories,
     }}>
       {children}
     </UserContext.Provider>
