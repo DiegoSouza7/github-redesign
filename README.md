@@ -1,4 +1,6 @@
-![Foodfy](https://github.com/DiegoSouza7/github-redesign/blob/main/Github-redisign.gif)
+
+![github-redesign](https://github.com/DiegoSouza7/github-redesign/blob/main/Github-redisign.gif)
+
 
 ## Getting Started
 
