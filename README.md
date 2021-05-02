@@ -1,3 +1,5 @@
+![Foodfy](https://github.com/DiegoSouza7/github-redesign/blob/main/Github-redisign.gif)
+
 ## Getting Started
 
 First, install the dependencies:
