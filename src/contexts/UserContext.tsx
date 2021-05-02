@@ -50,7 +50,6 @@ export function UserContextProvider({ children }: UserProviderProps) {
   const [userProfileStars, setUserProfileStars] = useState(0)
   const [userName, setUserName] = useState('DiegoSouza7')
   const [repositories, setRepositories] = useState<Repository[]>()
-  const [orderBy, setOrderBy] = useState('desc')
 
   async function searchRepository(name: string) {
     api.get(`/search/repositories?q=${userName}/${name}&per_page=10`).then(response => {
@@ -60,32 +59,17 @@ export function UserContextProvider({ children }: UserProviderProps) {
 
   function orderByrepositories(order: string) {
     if (order === 'date') {
-      api.get(`users/${userName}/repos?sort=updated=order${orderBy}`).then(response => {
-        if(orderBy === 'desc') {
-          setOrderBy('asc')
-        } else {
-          setOrderBy('desc')
-        }
+      api.get(`users/${userName}/repos?sort=updated`).then(response => {
         setRepositories(response.data)
       })
 
     } else if (order === 'language') {
-      api.get(`users/${userName}/repos?sort=language=order${orderBy}`).then(response => {
-        if(orderBy === 'desc') {
-          setOrderBy('asc')
-        } else {
-          setOrderBy('desc')
-        }
+      api.get(`users/${userName}/repos?sort=language`).then(response => {
         setRepositories(response.data)
       })
 
     } else if (order === 'type') {
-      api.get(`users/${userName}/repos?sort=type=order${orderBy}`).then(response => {
-        if(orderBy === 'desc') {
-          setOrderBy('asc')
-        } else {
-          setOrderBy('desc')
-        }
+      api.get(`users/${userName}/repos?sort=type`).then(response => {
         setRepositories(response.data)
       })
     }
