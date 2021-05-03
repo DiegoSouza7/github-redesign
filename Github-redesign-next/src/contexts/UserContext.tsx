@@ -48,7 +48,7 @@ const UserContext = createContext({} as UserContextProps)
 export function UserContextProvider({ children }: UserProviderProps) {
   const [userProfile, setUserProfile] = useState<User>()
   const [userProfileStars, setUserProfileStars] = useState(0)
-  const [userName, setUserName] = useState('DiegoSouza7')
+  const userName = 'DiegoSouza7'
   const [repositories, setRepositories] = useState<Repository[]>()
 
   async function searchRepository(name: string) {
