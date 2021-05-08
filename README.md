@@ -1,6 +1,6 @@
-<h1>Github-redesign</h1>
+## Github-redesign
 
-## Um redesign da página de Login e da listagem de repositórios do github.
+Um redesign da página de Login e da listagem de repositórios do github.
 
 - Projeto desenvolvido em next e em react.
 - Para mais detalhes de cada versão entrar na pasta do projeto.
